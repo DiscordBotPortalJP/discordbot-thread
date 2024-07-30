@@ -25,7 +25,8 @@ class AutoThreadCog(commands.Cog):
             return
         if message.channel.id not in CHANNEL_TARGET_IDS:
             return
-        await message.create_thread(name='コメント欄')
+        thread = await message.create_thread(name='コメント欄')
+        await thread.edit(archived=True)
         # name = message.content[:40]
         # if len(message.content) > 40:
         #     name = name + '...'

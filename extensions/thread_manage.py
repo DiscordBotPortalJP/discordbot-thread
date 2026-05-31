@@ -24,7 +24,7 @@ async def create_private_thread_with_voice(interaction: discord.Interaction):
         return
     thread = await interaction.channel.create_thread(
         name=interaction.user.voice.channel.name,
-        auto_archive_duration=60*24*1,
+        auto_archive_duration=60 * 24 * 1,
         type=None,
         invitable=False,
     )
@@ -86,7 +86,7 @@ class CreatePrivateThreadModal(discord.ui.Modal, title='プライベートスレ
         await interaction.response.defer(ephemeral=True)
         thread = await interaction.channel.create_thread(
             name=self.thread_name.value,
-            auto_archive_duration=60*24*7,
+            auto_archive_duration=60 * 24 * 7,
             type=None,
             invitable=False,
         )
@@ -166,7 +166,7 @@ class ThreadManageButtons(discord.ui.View):
     @discord.ui.button(label='期限を1日に', row=1, style=discord.ButtonStyle.green, custom_id='thread:archive_duration_1day')
     async def _archive_duration_1day_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.channel.edit(auto_archive_duration=60*24*1)
+        await interaction.channel.edit(auto_archive_duration=60 * 24 * 1)
         await interaction.followup.send('1日間発言がなかったら自動でクローズする設定に変更しました')
 
     @excepter
@@ -174,7 +174,7 @@ class ThreadManageButtons(discord.ui.View):
     @discord.ui.button(label='期限を1週間に', row=1, style=discord.ButtonStyle.green, custom_id='thread:archive_duration_1week')
     async def _archive_duration_1week_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.channel.edit(auto_archive_duration=60*24*7)
+        await interaction.channel.edit(auto_archive_duration=60 * 24 * 7)
         await interaction.followup.send('1週間発言がなかったら自動でクローズする設定に変更しました')
 
     @excepter
@@ -261,7 +261,7 @@ class ThreadManageCog(commands.Cog):
         if not interaction.user.resolved_permissions.manage_channels:
             await interaction.response.send_message('チャンネル管理権限が必要です', ephemeral=True)
             return
-        if not interaction.channel.type is discord.ChannelType.text:
+        if interaction.channel.type is not discord.ChannelType.text:
             await interaction.response.send_message('テキストチャンネルのみボタンを設置できます', ephemeral=True)
             return
         await interaction.response.send_message('誰でもプライベートスレッドを作成できるボタンです。', ephemeral=True)
